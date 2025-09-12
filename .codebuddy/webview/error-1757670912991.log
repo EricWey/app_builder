@@ -1,0 +1,4 @@
+Webview errors at url: http://localhost:8007/
+error: 
+ [Window Error]: [javascript-error]: JavaScript Error: Uncaught SyntaxError: Unexpected token '}' | Url: http://localhost:8007/app.js | File: http://localhost:8007/app.js:196:1
+Uncaught SyntaxError: Unexpected token '}'
