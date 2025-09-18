@@ -1,6 +1,4 @@
 {
-  "usingComponents": {},
   "navigationBarTitleText": "添加通知",
-  "enableShareAppMessage": true,
-  "enableShareTimeline": true
+  "usingComponents": {}
 }

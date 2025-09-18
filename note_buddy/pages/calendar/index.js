@@ -35,12 +35,8 @@ Page({
       days.push({ 
         day: i, 
         date,
-        subject: isNotifDay ? (date === '2025-09-15' ? '数学' : 
-                              date === '2025-09-16' ? '学校' : 
-                              date === '2025-09-17' ? '语文' : '通用') : '',
-        content: isNotifDay ? (date === '2025-09-15' ? '完成练习册P23-24' : 
-                              date === '2025-09-16' ? '下周三下午2点召开家长会' : 
-                              date === '2025-09-17' ? '周五前提交体检表' : '') : '',
+        subject: isNotifDay ? '通用' : '',
+        content: isNotifDay ? '' : '',
         hasNotification: isNotifDay,
         isToday: date === todayStr
       })
@@ -50,12 +46,7 @@ Page({
   },
 
   hasNotificationForDate(date) {
-    const mockDatesWithNotifications = [
-      '2025-09-15',
-      '2025-09-16', 
-      '2025-09-17'
-    ]
-    return mockDatesWithNotifications.includes(date)
+    return false
   },
 
   loadTodayNotifications() {

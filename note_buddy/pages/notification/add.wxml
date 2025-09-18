@@ -1,74 +1,73 @@
 <view class="container">
-  <!-- 表单输入区 (70%) -->
-  <view class="form-section">
-    <view class="form-item">
-      <text class="label">类别：</text>
-      <picker mode="selector" range="{{categories}}" range-key="name" bindchange="onCategoryChange">
-        <view class="picker">{{currentCategory.name || '请选择类别'}}</view>
-      </picker>
-      <input 
-        type="text" 
-        placeholder="自定义类别" 
-        bindinput="onCustomCategoryInput"
-        class="custom-input"
-        wx:if="{{showCustomInput}}"
-      />
-      <text class="toggle-custom" bindtap="toggleCustomInput">
-        {{showCustomInput ? '选择预设' : '自定义+'}}
-      </text>
-    </view>
-
-    <view class="form-item">
-      <text class="label">日期：</text>
-      <picker mode="date" fields="day" start="2023-01-01" end="2026-12-31" bindchange="onDateChange">
-        <view class="picker">{{selectedDate || '选择日期'}}</view>
-      </picker>
-    </view>
-
-    <view class="form-item">
-      <text class="label">通知内容：</text>
-      <textarea 
-        placeholder="输入通知内容..." 
-        bindinput="onContentInput"
-        class="content-input"
-        auto-height
-      />
-    </view>
-
-    <button type="primary" bindtap="submitForm" class="submit-btn">提交</button>
+  <view class="tabs">
+    <view 
+      class="tab {{activeTab === 'manual' ? 'active' : ''}}" 
+      data-tab="manual" 
+      bindtap="switchTab"
+    >手动添加</view>
+    <view 
+      class="tab {{activeTab === 'paste' ? 'active' : ''}}" 
+      data-tab="paste" 
+      bindtap="switchTab"
+    >粘贴解析</view>
   </view>
 
-  <!-- 解析预览区 (30%) -->
-  <view class="preview-section">
-    <text class="section-title">解析预览</text>
-    <view class="preview-content">
-      <view wx:if="{{parsedData.type === '当日作业'}}">
-        <text class="preview-title">📚 作业通知</text>
-        <text>学科: {{parsedData.extractedFields.subject || '未识别'}}\n</text>
-        <text>内容: {{parsedData.extractedFields.content}}\n</text>
-        <text>提交时间: {{parsedData.extractedFields.deadline || '未指定'}}</text>
+  <view wx:if="{{activeTab === 'manual'}}" class="tab-content">
+    <form bindsubmit="onSubmit">
+      <view class="form-item">
+        <picker mode="selector" range="{{notificationTypes}}" bindchange="onTypeChange">
+          <view class="picker">
+            通知类目：{{selectedType || '请选择'}}
+          </view>
+        </picker>
       </view>
+
+      <view class="form-item title-item">
+        <view class="add-title-link" bindtap="showTitleInput">
+          {{title ? title : '+ 添加新类目'}}
+        </view>
+      </view>
+
+      <view class="form-item">
+        <picker mode="date" value="{{date}}" bindchange="onDateChange">
+          <view class="picker">日期：{{date}}</view>
+        </picker>
+      </view>
+
+
+
+      <view class="form-item">
+        <textarea 
+          placeholder="请输入通知内容" 
+          value="{{content}}" 
+          bindinput="onContentInput"
+        />
+      </view>
+
+      <button form-type="submit" type="primary">保存通知</button>
+    </form>
+  </view>
+
+  <view wx:if="{{activeTab === 'paste'}}" class="tab-content">
+    <view class="form-item">
+      <textarea 
+        placeholder="请粘贴需要解析的通知内容" 
+        value="{{pasteContent}}" 
+        bindinput="onPasteInput"
+        style="height: 200px;"
+      />
+    </view>
+    
+    <button type="primary" bindtap="onParse">解析内容</button>
+    
+    <view wx:if="{{showParsedResult}}" class="parse-result">
+      <view class="result-title">解析结果：</view>
+      <view>类型：{{parsedContent.type}}</view>
+      <view>标题：{{parsedContent.title}}</view>
+      <view>日期：{{parsedContent.date}}</view>
+      <view class="result-content">{{parsedContent.content}}</view>
       
-      <view wx:elif="{{parsedData.type === '限期任务'}}">
-        <text class="preview-title">⏰ 限期任务</text>
-        <text>任务: {{parsedData.extractedFields.taskName || '未识别'}}\n</text>
-        <text>截止: {{parsedData.extractedFields.deadline || '未指定'}}\n</text>
-        <text>详情: {{parsedData.extractedFields.content}}</text>
-      </view>
-      
-      <view wx:elif="{{parsedData.type === '活动通知'}}">
-        <text class="preview-title">🎯 活动通知</text>
-        <text>活动: {{parsedData.extractedFields.activityName || '未识别'}}\n</text>
-        <text>时间: {{parsedData.extractedFields.time || '未指定'}}\n</text>
-        <text>地点: {{parsedData.extractedFields.location || '未指定'}}\n</text>
-        <text wx:if="{{parsedData.extractedFields.notes}}">备注: {{parsedData.extractedFields.notes}}</text>
-      </view>
-      
-      <view wx:else>
-        <text wx:if="{{parsedData.subject}}">类别: {{parsedData.subject}}\n</text>
-        <text wx:if="{{parsedData.date}}">日期: {{parsedData.date}}\n</text>
-        <text>{{parsedData.content || '输入内容后自动解析...'}}</text>
-      </view>
+      <button type="primary" bindtap="useParsedResult">使用此结果</button>
     </view>
   </view>
 </view>
