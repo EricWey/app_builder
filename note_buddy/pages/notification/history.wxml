@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- 搜索筛选区 -->
+  <view class="search-bar">
+    <input 
+      placeholder="搜索通知内容..." 
+      bindinput="onSearchInput"
+      value="{{searchText}}"
+    />
+    <picker 
+      mode="selector" 
+      range="{{filterOptions}}" 
+      bindchange="onFilterChange"
+    >
+      <view class="filter-btn">筛选</view>
+    </picker>
+  </view>
+
+  <!-- 历史记录列表 -->
+  <scroll-view scroll-y class="history-list">
+    <block wx:for="{{historyList}}" wx:key="id">
+      <view 
+        class="history-item {{item.type}}"
+        bindtap="onItemTap"
+        data-id="{{item.id}}"
+      >
+        <view class="item-header">
+          <text class="subject">{{item.subject}}</text>
+          <text class="date">{{item.date}}</text>
+        </view>
+        <text class="content">{{item.content}}</text>
+        <view class="item-footer">
+          <text class="type">{{item.type}}</text>
+          <view class="item-actions">
+            <icon 
+              wx:if="{{item.hasReminder}}" 
+              type="success" 
+              size="16"
+              color="#07C160"
+            />
+            <button 
+              size="mini" 
+              bindtap="onReuseTap"
+              data-id="{{item.id}}"
+            >复用</button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view>

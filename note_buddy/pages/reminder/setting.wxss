@@ -1,0 +1,31 @@
+.container {
+  padding: 15px;
+}
+
+.section {
+  margin-bottom: 20px;
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.picker {
+  color: #576B95;
+}
+
+.save-btn {
+  margin-top: 30px;
+}

@@ -1,0 +1,90 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.form-section {
+  flex: 7;
+  padding: 20px;
+}
+
+.preview-section {
+  flex: 3;
+  padding: 15px;
+  background: #f9f9f9;
+  border-top: 1px solid #eee;
+}
+
+.form-item {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+}
+
+.picker {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.custom-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.toggle-custom {
+  color: #1890ff;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.content-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  background-color: #07C160;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.preview-content {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+.preview-title {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 16px;
+}
+
+.preview-content text {
+  display: block;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}

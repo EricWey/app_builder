@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="header">
+    <text class="date">{{currentDate}}</text>
+    <view class="back-btn" bindtap="onBack">返回</view>
+  </view>
+
+  <view class="notification-list">
+    <block wx:for="{{notifications}}" wx:key="id">
+      <view class="notification-item">
+        <text class="subject">{{item.subject}}</text>
+        <text class="content">{{item.content}}</text>
+      </view>
+    </block>
+  </view>
+</view>

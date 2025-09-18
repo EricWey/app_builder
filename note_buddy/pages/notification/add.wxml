@@ -1,0 +1,74 @@
+<view class="container">
+  <!-- 表单输入区 (70%) -->
+  <view class="form-section">
+    <view class="form-item">
+      <text class="label">类别：</text>
+      <picker mode="selector" range="{{categories}}" range-key="name" bindchange="onCategoryChange">
+        <view class="picker">{{currentCategory.name || '请选择类别'}}</view>
+      </picker>
+      <input 
+        type="text" 
+        placeholder="自定义类别" 
+        bindinput="onCustomCategoryInput"
+        class="custom-input"
+        wx:if="{{showCustomInput}}"
+      />
+      <text class="toggle-custom" bindtap="toggleCustomInput">
+        {{showCustomInput ? '选择预设' : '自定义+'}}
+      </text>
+    </view>
+
+    <view class="form-item">
+      <text class="label">日期：</text>
+      <picker mode="date" fields="day" start="2023-01-01" end="2026-12-31" bindchange="onDateChange">
+        <view class="picker">{{selectedDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">通知内容：</text>
+      <textarea 
+        placeholder="输入通知内容..." 
+        bindinput="onContentInput"
+        class="content-input"
+        auto-height
+      />
+    </view>
+
+    <button type="primary" bindtap="submitForm" class="submit-btn">提交</button>
+  </view>
+
+  <!-- 解析预览区 (30%) -->
+  <view class="preview-section">
+    <text class="section-title">解析预览</text>
+    <view class="preview-content">
+      <view wx:if="{{parsedData.type === '当日作业'}}">
+        <text class="preview-title">📚 作业通知</text>
+        <text>学科: {{parsedData.extractedFields.subject || '未识别'}}\n</text>
+        <text>内容: {{parsedData.extractedFields.content}}\n</text>
+        <text>提交时间: {{parsedData.extractedFields.deadline || '未指定'}}</text>
+      </view>
+      
+      <view wx:elif="{{parsedData.type === '限期任务'}}">
+        <text class="preview-title">⏰ 限期任务</text>
+        <text>任务: {{parsedData.extractedFields.taskName || '未识别'}}\n</text>
+        <text>截止: {{parsedData.extractedFields.deadline || '未指定'}}\n</text>
+        <text>详情: {{parsedData.extractedFields.content}}</text>
+      </view>
+      
+      <view wx:elif="{{parsedData.type === '活动通知'}}">
+        <text class="preview-title">🎯 活动通知</text>
+        <text>活动: {{parsedData.extractedFields.activityName || '未识别'}}\n</text>
+        <text>时间: {{parsedData.extractedFields.time || '未指定'}}\n</text>
+        <text>地点: {{parsedData.extractedFields.location || '未指定'}}\n</text>
+        <text wx:if="{{parsedData.extractedFields.notes}}">备注: {{parsedData.extractedFields.notes}}</text>
+      </view>
+      
+      <view wx:else>
+        <text wx:if="{{parsedData.subject}}">类别: {{parsedData.subject}}\n</text>
+        <text wx:if="{{parsedData.date}}">日期: {{parsedData.date}}\n</text>
+        <text>{{parsedData.content || '输入内容后自动解析...'}}</text>
+      </view>
+    </view>
+  </view>
+</view>

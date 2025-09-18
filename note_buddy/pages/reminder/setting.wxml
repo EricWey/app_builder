@@ -1,0 +1,44 @@
+<view class="container">
+  <!-- 全局提醒开关 -->
+  <view class="section">
+    <view class="section-title">全局设置</view>
+    <switch checked="{{globalReminderEnabled}}" bindchange="toggleGlobalReminder"/>
+  </view>
+
+  <!-- 作业提醒设置 -->
+  <view class="section">
+    <view class="section-title">作业提醒</view>
+    <view class="setting-item">
+      <text>提前提醒时间</text>
+      <picker 
+        mode="selector" 
+        range="{{timeOptions}}" 
+        value="{{homeworkReminderIndex}}"
+        bindchange="changeHomeworkReminder"
+      >
+        <view class="picker">{{timeOptions[homeworkReminderIndex]}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 活动提醒设置 -->
+  <view class="section">
+    <view class="section-title">活动提醒</view>
+    <view class="setting-item">
+      <text>提前提醒时间</text>
+      <picker 
+        mode="selector" 
+        range="{{timeOptions}}" 
+        value="{{activityReminderIndex}}"
+        bindchange="changeActivityReminder"
+      >
+        <view class="picker">{{timeOptions[activityReminderIndex]}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="save-btn">
+    <button type="primary" bindtap="saveSettings">保存设置</button>
+  </view>
+</view>

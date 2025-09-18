@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- 今日通知概要 -->
+  <view class="today-summary">
+    <text>今日通知</text>
+    <block wx:for="{{todayNotifications}}" wx:key="id">
+      <view class="notification-item">
+        <text>{{item.subject}}: {{item.content}}</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 月份导航 -->
+  <view class="month-header">
+    <text>{{year}}年{{month}}月</text>
+    <view class="add-notification-btn" bindtap="navigateToAddNotification">
+      <text>+</text>
+    </view>
+  </view>
+  
+  <!-- 星期标题 -->
+  <view class="week-header">
+    <text wx:for="{{weeks}}" wx:key="*this">{{item}}</text>
+  </view>
+  
+  <!-- 日历格子 -->
+  <view class="calendar-grid">
+    <block wx:for="{{days}}" wx:key="date">
+      <view 
+        class="day-cell {{item.hasNotification ? 'has-notification' : ''}} {{item.isToday ? 'today' : ''}} {{item.date === selectedDate ? 'selected-day' : ''}}"
+        bindtap="onDayTap"
+        data-date="{{item.date}}"
+      >
+        <text>{{item.day}}</text>
+        <view wx:if="{{item.hasNotification}}" class="notification-dot"></view>
+      </view>
+    </block>
+  </view>
+  
+
+
+  <!-- 选中日期通知 -->
+  <view wx:if="{{selectedNotifications.length > 0}}" class="selected-summary">
+    <text>{{selectedNotifications[0].date}} 通知摘要</text>
+    <view class="notification-item" bindtap="onNotificationTap">
+      <text>{{selectedNotifications[0].subject}}: {{selectedNotifications[0].content}}</text>
+    </view>
+  </view>
+</view>

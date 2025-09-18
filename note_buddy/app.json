@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/calendar/index",
+    "pages/notification/add",
+    "pages/notification/detail",
+    "pages/settings/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "Note Buddy",
+    "navigationBarBackgroundColor": "#07C160"
+  }
+}
