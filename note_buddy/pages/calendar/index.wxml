@@ -42,7 +42,7 @@
   <view wx:if="{{selectedNotifications.length > 0}}" class="selected-summary">
     <text>{{selectedNotifications[0].date}} 通知摘要</text>
     <view class="notification-item" bindtap="onNotificationTap">
-      <text>{{selectedNotifications[0].subject}}: {{selectedNotifications[0].content}}</text>
+      <text>{{selectedNotifications[0].type}}: {{selectedNotifications[0].content}}</text>
     </view>
   </view>
 </view>

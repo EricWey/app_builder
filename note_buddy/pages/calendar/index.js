@@ -4,14 +4,59 @@ Page({
     month: new Date().getMonth() + 1,
     weeks: ['日', '一', '二', '三', '四', '五', '六'],
     days: [],
+    notifications: [],
     todayNotifications: [],
     selectedNotifications: [],
     selectedDate: null
   },
 
-  onLoad() {
+  async onLoad() {
+    console.log('日历页面加载...')
+    await this.loadNotifications()
+    console.log('通知数据:', this.data.notifications)
     this.initCalendar()
     this.loadTodayNotifications()
+    
+    // 添加调试按钮
+    this.setData({
+      debug: true
+    })
+  },
+
+  // 调试方法
+  onDebugTap() {
+    const fs = wx.getFileSystemManager()
+    fs.readFile({
+      filePath: `${wx.env.USER_DATA_PATH}/notifications/${this.data.year}-${this.data.month.toString().padStart(2,'0')}/notifications_${this.data.year}-${this.data.month.toString().padStart(2,'0')}-${new Date().getDate().toString().padStart(2,'0')}.json`,
+      encoding: 'utf8',
+      success: (res) => {
+        wx.showModal({
+          title: '调试信息',
+          content: JSON.stringify(JSON.parse(res.data), null, 2),
+          showCancel: false
+        })
+      }
+    })
+  },
+
+  loadNotifications() {
+    return new Promise((resolve) => {
+      const fs = wx.getFileSystemManager()
+      fs.readFile({
+        filePath: `${wx.env.USER_DATA_PATH}/notifications.json`,
+        encoding: 'utf8',
+        success: (res) => {
+          this.setData({
+            notifications: JSON.parse(res.data) || []
+          })
+          resolve()
+        },
+        fail: () => {
+          this.setData({ notifications: [] })
+          resolve()
+        }
+      })
+    })
   },
 
   initCalendar() {
@@ -32,11 +77,12 @@ Page({
     for (let i = 1; i <= lastDay.getDate(); i++) {
       const date = `${year}-${month.toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`
       const isNotifDay = this.hasNotificationForDate(date)
+      const notification = isNotifDay ? this.data.notifications.find(notif => notif.date === date) : null
       days.push({ 
         day: i, 
         date,
-        subject: isNotifDay ? '通用' : '',
-        content: isNotifDay ? '' : '',
+        subject: notification?.subject || '',
+        content: notification?.content || '',
         hasNotification: isNotifDay,
         isToday: date === todayStr
       })
@@ -46,18 +92,21 @@ Page({
   },
 
   hasNotificationForDate(date) {
-    return false
+    return this.data.notifications?.some(notif => notif.date === date) || false
   },
 
   loadTodayNotifications() {
     const todayStr = `${this.data.year}-${this.data.month.toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`
     const todayNotifs = this.data.days
       .filter(day => day.date === todayStr && day.hasNotification)
-      .map(day => ({
-        id: day.date,
-        subject: day.subject || '通用',
-        content: day.content || '今日通知'
-      }))
+      .map(day => {
+        const notification = this.data.notifications.find(n => n.date === day.date)
+        return {
+          id: day.date,
+          subject: notification?.type || '通用',
+          content: notification?.content || '今日通知'
+        }
+      })
     
     this.setData({
       todayNotifications: todayNotifs.length ? todayNotifs : [
@@ -70,20 +119,14 @@ Page({
     const { date } = e.currentTarget.dataset
     const selectedDay = this.data.days.find(day => day.date === date)
     
-    if (!selectedDay?.hasNotification) {
+    const notifications = this.data.notifications?.filter(
+      notif => notif.date === date
+    ) || []
+    
+    if (notifications.length === 0) {
       wx.showToast({ title: '该日期没有通知', icon: 'none' })
       return
     }
-    
-    // 准备要传递的通知数据
-    const notifications = Array.isArray(selectedDay.notifications) 
-      ? selectedDay.notifications 
-      : [{
-          id: date,
-          date,
-          subject: selectedDay.subject,
-          content: selectedDay.content
-        }]
     
     this.setData({
       selectedNotifications: notifications,
